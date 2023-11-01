@@ -23,17 +23,25 @@ Notes: A simplification here is the termination condition, because the number of
 #include <helper_functions.h> // helper functions for SDK examples
 
 constexpr int BLOCK_SIZE = 32;
-constexpr int NUM_BLOCK = 7;
+constexpr int NUM_BLOCK = 64;
 void swap(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
     return;
 }
-__global__ void mpmc(volatile int* src, volatile int* dst, int* dst_read_counter, int* dst_write_counter, int array_size, int threshold) {
+__global__ void mpmc(volatile int* src, volatile int* dst, int* dst_read_batch_offset, int* dst_write_counter, int* processed_num, int array_size, int threshold) {
     int tid = threadIdx.x + blockIdx.x * blockDim.x;
     bool src_process_done = false;
     int offset = 0;
+    bool batch_offset_assigned = false;
+    __shared__ int batch_offset;
+    __shared__ unsigned int group_mask;
+    if (threadIdx.x == 0) {
+        batch_offset = 0;
+        group_mask = 0;
+    }
+    __syncthreads();
     while (true) {
         if (!src_process_done) {
             int pos = 0;
@@ -47,38 +55,57 @@ __global__ void mpmc(volatile int* src, volatile int* dst, int* dst_read_counter
                     pos = atomicAdd(dst_write_counter, 1);
                     dst[pos] = id;
                     __threadfence();
+                    // update value first, then update total processed count, to ensure memory consistency
+                    atomicAdd(processed_num, 1);
                 }
                 offset += BLOCK_SIZE * NUM_BLOCK;
                 continue;
             }
         }
         
-        int old_read_val = atomicAdd(dst_read_counter, 1);
-        int old_write_val = atomicAdd(dst_write_counter, 0);
-        if (old_read_val >= old_write_val) {
-            atomicAdd(dst_read_counter, -1);
-        }
-        else {
-            int idx = dst[old_read_val];
-            if (src[idx] > threshold) {
-                src[idx] = 0;
+        if (threadIdx.x == 0) {
+            if (!batch_offset_assigned) {
+                int batch_id = atomicAdd(dst_read_batch_offset, 1);
+                batch_offset_assigned = true;
+                batch_offset = batch_id * BLOCK_SIZE;               
             }
-            else {
-                src[idx] = 3;
-            }
-            dst[old_read_val] = array_size;
         }
-        if (src_process_done && (old_read_val == old_write_val)) {
+        __syncthreads();
+        int current_processed_num = *processed_num;
+        
+        if ((group_mask & (1 << threadIdx.x)) == 0) {
+            if (current_processed_num > batch_offset + threadIdx.x) {
+                int idx = dst[batch_offset + threadIdx.x];
+                if (src[idx] > threshold) {
+                    src[idx] = 0;
+                }
+                else {
+                    src[idx] = 0x5555AAAA;
+                }
+                dst[batch_offset + threadIdx.x] = array_size;
+                atomicOr(&group_mask, 1 << threadIdx.x); 
+                //printf("group_mask is %x\n", group_mask);
+            }
+        }
+        if (threadIdx.x == 0) {
+            if (__popc(group_mask) == BLOCK_SIZE) {
+                batch_offset += BLOCK_SIZE * NUM_BLOCK;
+                group_mask = 0;
+                //printf("batch offset is %d, processed_num %d\n", batch_offset, *processed_num);
+            }
+        }
+        __syncthreads();
+        if (batch_offset + __popc(group_mask) >= (array_size - 1 - threshold)) {
             break;
         }
-        
     }
 }
 
 
 int main() {
-    const int length = 1024 * 1024;
-    int threshold_value = length - 108;
+    const int length = 8 * 1024 * 1024;
+    const int loop_cnt = 1;
+    int threshold_value = length * 3 / 4;
     int* src = new int[length];
     int* dst = new int[length];
     int valid_value = 0;
@@ -97,20 +124,23 @@ int main() {
     int* device_dst;
     int* dst_read_counter;
     int* dst_write_counter;
+    int* processed_count;
     cudaMalloc(&device_src, length * sizeof(int));
     cudaMalloc(&device_dst, length * sizeof(int));
     cudaMalloc(&dst_read_counter, sizeof(int));
     cudaMalloc(&dst_write_counter, sizeof(int));
+    cudaMalloc(&processed_count, sizeof(int));
     cudaMemcpy(device_src, src, length * sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(device_dst, dst, length * sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(dst_read_counter, &init_value, 1 * sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(dst_write_counter, &init_value, 1 * sizeof(int), cudaMemcpyHostToDevice);
+    cudaMemcpy(processed_count, &init_value, 1 * sizeof(int), cudaMemcpyHostToDevice);
     cudaEvent_t start, stop;
     float time;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
     cudaEventRecord(start);
-    mpmc << <NUM_BLOCK, BLOCK_SIZE >> > (device_src, device_dst, dst_read_counter, dst_write_counter, length, threshold_value);
+    mpmc << <NUM_BLOCK, BLOCK_SIZE >> > (device_src, device_dst, dst_read_counter, dst_write_counter, processed_count, length, threshold_value);
     cudaEventRecord(stop);
     cudaDeviceSynchronize();
     cudaEventElapsedTime(&time, start, stop);
@@ -118,16 +148,16 @@ int main() {
     cudaEventDestroy(stop);
     cudaMemcpy(dst, device_src, length * sizeof(int), cudaMemcpyDeviceToHost);
     cudaMemcpy(&result, dst_read_counter, sizeof(int), cudaMemcpyDeviceToHost);
-    std::cout << "Run time is " << time << " ms." << std::endl;
+    std::cout << "Run time is " << time / loop_cnt << " ms." << std::endl;
     valid_value = length - threshold_value - 1;
     bool error = false;
-    if (result != valid_value) {
-        std::cout << " read result is wrong, expected: " << valid_value << " , result: " << result << std::endl;
+    if (result != NUM_BLOCK) {
+        std::cout << " block id read result is wrong, expected: " << valid_value << " , result: " << result << std::endl;
         error = true;
     }
     cudaMemcpy(&result, dst_write_counter, sizeof(int), cudaMemcpyDeviceToHost);
     if (result != valid_value) {
-        std::cout << " write result is wrong, expected: " << valid_value << " , result: " << result << std::endl;
+        std::cout << " processed write result is wrong, expected: " << valid_value << " , result: " << result << std::endl;
         error = true;
     }
     
@@ -149,6 +179,7 @@ int main() {
     cudaFree(device_dst);
     cudaFree(dst_read_counter);
     cudaFree(dst_write_counter);
+    cudaFree(processed_count);
     delete[] src;
     delete[] dst;
     if (error) {
