@@ -1,3 +1,4 @@
+Notes
 1. nv3070 l2 byte mask findings from Nsight compute:
   *L1 receives 131 sectors/131 reqs of global store but have 103 sector misses to L2. meaning L1 could temporarily store the data for a while, even we write 4 bytes each time.
   *L2
