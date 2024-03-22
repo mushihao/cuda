@@ -1,6 +1,6 @@
 Notes
 1. nv3070 l2 byte mask findings from Nsight compute:
-2. 
+   
   *L1 receives 131 sectors/131 reqs of global store but have 103 sector misses to L2. meaning L1 could temporarily store the data for a while, even we write 4 bytes each time.
    
   *L2
@@ -26,5 +26,6 @@ Results on 3070
    
    i-cache interfere:  mask 0x41 -> smid 0 and smid 12 -> latency 238 clks  (not sure how the block is distributed and what is the SMID mapping) 
    
-               -> ans to Q2: the original kernel only has 700 instructions (and my guess is correct.) Need to change the abs to some other arithmetic operations, so we can get large kernel code. 
-               
+               -> ans to Q2: the original kernel only has 700 instructions (and my guess is correct.) Need to change the abs to some other arithmetic operations, so we can get large kernel code. I created a kernel code with 37000 instructions, which is ~290KB.    ~19KB;  
+
+          After graduately increasing the kernel size, I found that:  3018 inst(~24KB) -> 78 clk; 4649 inst(~37KB) ->81 clks; (latency keep increasing with increasing # of insts and till) -> 7596 insts(~60KB) -> 238 clks;
