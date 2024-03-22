@@ -5,9 +5,9 @@
    
    -L2
   
-      -Load: 98 sectors/98 requests with 1.02% hit rate
+      +Load: 98 sectors/98 requests with 1.02% hit rate
      
-      -Store: 103 sectors/100 requests with 100% hit rate
+      +Store: 103 sectors/100 requests with 100% hit rate
 
 
 **Summary:** Looks like L1 has write combine feature; L2 has byte mask enabled for every cacheline stored.
