@@ -31,9 +31,9 @@ It looks like that L1 has write combine feature and L2 has byte mask enabled for
    
    * i-cache interfere:  mask 0x41 -> smid 0 and smid 12 -> latency 238 clks  (Q: not sure how the block is distributed and what is the SMID mapping) 
    
-          ans to Q2: the original kernel only has 700 instructions (and my guess is correct.) Need to change the abs to some other arithmetic operations, so we can get large kernel code. I created a kernel code with 37000 instructions, which is ~290KB.    ~19KB;  
+ans to Q2: the original kernel only has 700 instructions (and my guess is correct.) Need to change the abs to some other arithmetic operations, so we can get large kernel code. I created a kernel code with 37000 instructions, which is ~290KB.    ~19KB;  
 
-          After graduately increasing the kernel size, I found that:  3018 inst(~24KB) -> 78 clk; 4649 inst(~37KB) ->81 clks; (latency keep increasing with increasing # of insts and till) -> 7596 insts(~60KB) -> 238 clks;
-          *Need to further analyze the reason behind this
+After graduately increasing the kernel size, I found that:  3018 inst(~24KB) -> 78 clk; 4649 inst(~37KB) ->81 clks; (latency keep increasing with increasing # of insts and till) -> 7596 insts(~60KB) -> 238 clks;
+          **Need to further analyze the reason behind this** (Maybe because L1 instruction cache is 24KB? How about the const cache sharing?)
 
    * bandwidth: need to figure out the right way to get bandwidth
