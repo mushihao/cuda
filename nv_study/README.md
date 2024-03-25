@@ -1,15 +1,15 @@
 # NV 3070 Test Results and Analysis
 ## 1. L2 byte mask findings from Nsight compute (l2_byte_mask_test.cu):
    
-### L1 
-   
-Receives 131 sectors/131 reqs of global store but have 103 sector misses to L2. meaning L1 could temporarily store the data for a while, even we write 4 bytes each time.
-   
-### L2
+### Results 
 
-* Load： 98 sectors/98 requests with 1.02% hit rate
+* L1: Receives 131 sectors/131 reqs of global store but have 103 sector misses to L2. meaning L1 could temporarily store the data for a while, even we write 4 bytes each time.
 
-* Store: 103 sectors/100 requests with 100% hit rate
+* L2
+
+** Load： 98 sectors/98 requests with 1.02% hit rate
+
+** Store: 103 sectors/100 requests with 100% hit rate
 
 ### Summary
 
