@@ -35,6 +35,10 @@ ans to Q2: the original kernel only has 700 instructions (and my guess is correc
 
 After graduately increasing the kernel size, I found that:  3018 inst(~24KB) -> 78 clk; 4649 inst(~37KB) ->81 clks; (latency keep increasing with increasing # of insts and till) -> 7596 insts(~60KB) -> 238 clks;
 
-**Need to further analyze the reason behind this** (Maybe because L1 instruction cache is 24KB? How about the const cache sharing?)
+**Need to further analyze the reason behind this**
 
    * bandwidth: need to figure out the right way to get bandwidth
+
+### Summary
+
+Constant cache latency is 14 clocks and constant memory (LLC) is 78 clocks. The constant cache has constant data and instruction data. There is some sort of sharing, but it depends on the SM/constant cache/GPC distribution. That needs a more exhausive work to investigate.
