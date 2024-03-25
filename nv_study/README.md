@@ -1,23 +1,23 @@
 # NV 3070 Test Results and Analysis
 ## 1. L2 byte mask findings from Nsight compute (l2_byte_mask_test.cu):
    
-### Results 
+### 1.1 Results 
 
 * L1: Receives 131 sectors/131 reqs of global store but have 103 sector misses to L2. meaning L1 could temporarily store the data for a while, even we write 4 bytes each time.
 
 * L2
 
-** Load： 98 sectors/98 requests with 1.02% hit rate
+    * Load： 98 sectors/98 requests with 1.02% hit rate
 
-** Store: 103 sectors/100 requests with 100% hit rate
+    * Store: 103 sectors/100 requests with 100% hit rate
 
-### Summary
+### 1.2 Summary
 
 It looks like that L1 has write combine feature and L2 has byte mask enabled for every cacheline stored.
 
 ## 2. Constant mem microbenchmarking from: https://www.stuffedcow.net/research/cudabmk
 
-### Questions of original code
+### 2.1 Questions of original code
 
    * Q1: exec mask for shared TPC/diff TPC/shared SM  is tied to chips, but this may not be correct. Need to figure out thread block distributions
 
@@ -25,7 +25,7 @@ It looks like that L1 has write combine feature and L2 has byte mask enabled for
 
    * Q3: kcbw_8t kernel. I think testing bandwidth should do coalescing access, but each thread is 64 arr ele apart, which means 256byte. not quite sure the reason behind it.
 
-### Results
+### 2.2 Results
 
    * latency: 14 clks (constant cache hit) and 78clks (constant cache miss)
    
@@ -39,6 +39,6 @@ After graduately increasing the kernel size, I found that:  3018 inst(~24KB) -> 
 
    * bandwidth: need to figure out the right way to get bandwidth
 
-### Summary
+### 2.3 Summary
 
 Constant cache latency is 14 clocks and constant memory (LLC) is 78 clocks. The constant cache has constant data and instruction data. There is some sort of sharing, but it depends on the SM/constant cache/GPC distribution. That needs a more exhausive work to investigate.
