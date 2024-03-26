@@ -65,13 +65,15 @@ for (int i = 0; i < CARRAY_SIZE; i = i + blockDim.x) {
 
 ## 3. Texture
 
-The test uses point sampling of 1D texture, which is 1-to-1 mapping between original 1D array.
+The test uses point sampling of 1D texture, which is 1-to-1 mapping between original 1D array. Use linear memory which has larger maximum boundary in CUDA.
 
 ### 3.1 Bandwidth Test
 
 In L1 cache, all accesses are 1 sector/req. Meaning that using point sampling on 1D texture, the Texture Pipeline will only coalesce 32Byte.
 
-* For L1 hit, per SM bandwidth is about 61.184bytes/clk
+* For L1 hit, the total bandwidth is ~2185GB/s (not sure why the per SM calculation is wrong)
+
+* For L2 hit/L1 miss, how to avoid L1 hit completely?
 
 TODO: try 2D linear sampling and see if the sector/req increases.
 
