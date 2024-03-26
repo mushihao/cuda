@@ -37,17 +37,30 @@ After graduately increasing the kernel size, I found that:  3018 inst(~24KB) -> 
 
 **Need to further analyze the reason behind this**
 
-   * bandwidth: need to figure out the right way to get bandwidth
+   * bandwidth: changed the kernel code used in example
 
+       * kernel code:
+```C++
+for (int i = 0; i < CARRAY_SIZE; i = i + blockDim.x) {
+    t1 += d_carray[i];
+}
+```
+       * Results: scan throught 1 to 64 threads per block. For 1 block, the bandwidth is increasing from 0.068 bytes/clk to 1.997 bytes/clk ; if it accesses the same address (t1 += d_carry[i & 0x1]), the bandwidth can reach 4.558 bytes/clk. It seems matched what I found online: https://forums.developer.nvidia.com/t/constant-memory-bandwidth-program/12574
+       
 ### 2.3 Summary
 
-Constant cache latency is 14 clocks and constant memory (LLC) is 78 clocks. The constant cache has constant data and instruction data. There is some sort of sharing, but it depends on the SM/constant cache/GPC distribution. That needs a more exhausive work to investigate.
+* Constant cache latency is 14 clocks and constant memory (LLC) is 78 clocks.
+  
+* The constant cache has constant data and instruction data. There is some sort of sharing, but it depends on the SM/constant cache/GPC distribution. That needs a more exhausive work to investigate.
+
+* The constant cache BW is slow (2 bytes/clk), and it is better when you have multiple outstanding accesses with the same address. This is different from L1/L2. Probably this is a simple blocking cache with low bandwidth. 
 
 ## 3. Texture
+
 using 1D sampling should be fine
 latency: Tex L1 hit/ Tex L1 miss
 BW: Tex L1 hit/ Tex L1 miss
 
 ## 4. Texture and Data Sharing in L1
-latency
-BW
+
+latency BW
