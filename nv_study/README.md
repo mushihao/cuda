@@ -64,9 +64,15 @@ for (int i = 0; i < CARRAY_SIZE; i = i + blockDim.x) {
 
 ## 3. Texture
 
-using 1D sampling should be fine
-latency: Tex L1 hit/ Tex L1 miss
-BW: Tex L1 hit/ Tex L1 miss
+The test uses point sampling of 1D texture, which is 1-to-1 mapping between original 1D array.
+
+### 3.1 Bandwidth Test
+
+In L1 cache, all accesses are 1 sector/req. Meaning that using point sampling on 1D texture, the Texture Pipeline will only coalesce 32Byte.
+
+* For L1 hit, per SM bandwidth is about 61.184bytes/clk
+
+TODO: try 2D linear sampling and see if the sector/req increases.
 
 ## 4. Texture and Data Sharing in L1
 
