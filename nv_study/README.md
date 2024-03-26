@@ -45,7 +45,12 @@ for (int i = 0; i < CARRAY_SIZE; i = i + blockDim.x) {
     t1 += d_carray[i];
 }
 ```
-       * Results: scan throught 1 to 64 threads per block. For 1 block, the bandwidth is increasing from 0.068 bytes/clk to 1.997 bytes/clk ; if it accesses the same address (t1 += d_carry[i & 0x1]), the bandwidth can reach 4.558 bytes/clk. It seems matched what I found online: https://forums.developer.nvidia.com/t/constant-memory-bandwidth-program/12574
+
+       * Results: 
+       
+           * scan through 1 to 64 threads per block. For 1 block, the bandwidth is increasing from 0.068 bytes/clk to 1.997 bytes/clk ; if it accesses the same address (t1 += d_carry[i & 0x1]), the bandwidth can reach 4.558 bytes/clk. It seems matched what I found online: https://forums.developer.nvidia.com/t/constant-memory-bandwidth-program/12574
+
+           * 64 threads per block. Scan through 1 to 64 blocks, the bandwidth is almost fixed to 2 bytes/clk.
        
 ### 2.3 Summary
 
@@ -53,7 +58,7 @@ for (int i = 0; i < CARRAY_SIZE; i = i + blockDim.x) {
   
 * The constant cache has constant data and instruction data. There is some sort of sharing, but it depends on the SM/constant cache/GPC distribution. That needs a more exhausive work to investigate.
 
-* The constant cache BW is slow (2 bytes/clk), and it is better when you have multiple outstanding accesses with the same address. This is different from L1/L2. Probably this is a simple blocking cache with low bandwidth. 
+* The constant cache BW is slow (2 bytes/clk), and it is better when you have multiple outstanding accesses with the same address. This is different from L1/L2. And since the bandwidth is not increasing with more blocks, it means there is only 1 constant cache. Probably this is a simple blocking cache with low bandwidth.
 
 ## 3. Texture
 
