@@ -46,6 +46,7 @@ for (int i = 0; i < CARRAY_SIZE; i = i + blockDim.x) {
 }
 ```
 
+
        * Results: 
        
            * scan through 1 to 64 threads per block. For 1 block, the bandwidth is increasing from 0.068 bytes/clk to 1.997 bytes/clk ; if it accesses the same address (t1 += d_carry[i & 0x1]), the bandwidth can reach 4.558 bytes/clk. It seems matched what I found online: https://forums.developer.nvidia.com/t/constant-memory-bandwidth-program/12574
