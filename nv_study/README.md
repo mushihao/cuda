@@ -60,6 +60,8 @@ for (int i = 0; i < CARRAY_SIZE; i = i + blockDim.x) {
 
 * The constant cache BW is slow (2 bytes/clk), and it is better when you have multiple outstanding accesses with the same address. This is different from L1/L2. And since the bandwidth is not increasing with more blocks, it means there is only 1 constant cache. Probably this is a simple blocking cache with low bandwidth.
 
+(But the third conclusion is conflicting with the second one, while I thought there are multiple copies of constant caches and there are some sharing rules between SMs and constant caches. Need further testing and thoughts.)
+
 ## 3. Texture
 
 using 1D sampling should be fine
