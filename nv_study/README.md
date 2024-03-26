@@ -42,3 +42,12 @@ After graduately increasing the kernel size, I found that:  3018 inst(~24KB) -> 
 ### 2.3 Summary
 
 Constant cache latency is 14 clocks and constant memory (LLC) is 78 clocks. The constant cache has constant data and instruction data. There is some sort of sharing, but it depends on the SM/constant cache/GPC distribution. That needs a more exhausive work to investigate.
+
+## 3. Texture
+using 1D sampling should be fine
+latency: Tex L1 hit/ Tex L1 miss
+BW: Tex L1 hit/ Tex L1 miss
+
+## 4. Texture and Data Sharing in L1
+latency
+BW
