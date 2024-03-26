@@ -10,7 +10,7 @@
 #include <helper_functions.h> // helper functions for SDK examples
 
 constexpr int BLOCK_SIZE = 128;
-constexpr int NUM_BLOCK = 512;
+constexpr int NUM_BLOCK = 460;
 constexpr int kIter = 20;
 
 // Normal Load bandwidth
@@ -58,7 +58,7 @@ __global__ void texture_bandwidth_test(volatile int* src, long long int* dst, in
 }
 
 int main() {
-    const int length = 512 * 1024;
+    const int length = 8 * 1024;
     const int loop_cnt = 20;
     int* src = new int[length];
     long long int* dst = new long long int[2048];
