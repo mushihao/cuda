@@ -54,13 +54,15 @@ for (int i = 0; i < CARRAY_SIZE; i = i + blockDim.x) {
        
 ### 2.3 Summary
 
-* Constant cache latency is 14 clocks and constant memory (LLC) is 78 clocks.
+* Constant cache latency is 14 clocks and constant cache(L1.5) is 78 clock. 
   
 * The constant cache has constant data and instruction data. There is some sort of sharing, but it depends on the SM/constant cache/GPC distribution. That needs a more exhausive work to investigate.
 
-* The constant cache BW is slow (2 bytes/clk), and it is better when you have multiple outstanding accesses with the same address. This is different from L1/L2. And since the bandwidth is not increasing with more blocks, it means there is only 1 constant cache. Probably this is a simple blocking cache with low bandwidth.
+* The constant cache BW is slow (2 bytes/clk), and it is better when you have multiple outstanding accesses with the same address.(Broadcast feature) This is different from L1/L2. And since the bandwidth is not increasing with more blocks, it means there is only 1 constant cache. Probably this is a simple blocking cache with low bandwidth.
 
 (But the third conclusion is conflicting with the second one, while I thought there are multiple copies of constant caches and there are some sharing rules between SMs and constant caches. Need further testing and thoughts.)
+
+* The T4 dissect report mentions that there is a private L1 constant cache and L1.5 constant cache. But after my tests, I think the L1.5 is shared by some of SMs, which needs further investigation. And the bandwidth is not increasing, probably because all L1.5 caches merged into 1 port to L2, so we don't bandwidth increasing. And probably this is only a narrow data bus (16 bits?).
 
 ## 3. Texture
 
