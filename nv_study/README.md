@@ -29,7 +29,9 @@ It looks like that L1 has write combine feature and L2 has byte mask enabled for
 
 * latency: 14 clks (constant cache hit) and 78clks (constant cache miss)
    
-* i-cache interfere:  mask 0x41 -> smid 0 and smid 12 -> latency 238 clks  (Q: not sure how the block is distributed and what is the SMID mapping) 
+* i-cache interfere:  mask 0x41 -> smid 0 and smid 12 -> latency 238 clks  (Q: not sure how the block is distributed and what is the SMID mapping;)
+
+    * By a scanning of SMIDs, I found that **SMIDs 12, 24, 36, 1, 13**  have worst I-cache interference with SMID 0, >200clks; while **SMIDs 10, 32, 42, 9** have worse I-cache interference with SMID 0, > 100clks
    
 ans to Q2: the original kernel only has 700 instructions (and my guess is correct.) Need to change the abs to some other arithmetic operations, so we can get large kernel code. I created a kernel code with 37000 instructions, which is ~290KB.    ~19KB;  
 
