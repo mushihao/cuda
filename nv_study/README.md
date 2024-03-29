@@ -72,13 +72,16 @@ The test uses point sampling of 1D texture, which is 1-to-1 mapping between orig
 
 In L1 cache, all accesses are 1 sector/req. Meaning that using point sampling on 1D texture, the Texture Pipeline will only coalesce 32Byte.
 
-* For L1 hit, the total bandwidth is ~2185GB/s (not sure why the per SM calculation is wrong)
+* For L1 hit, the total bandwidth is ~1940GB/s  (460 blocks and 128 threads per block, freq locked at 1500MHz)
 
 * For L2 hit/L1 miss, how to avoid L1 hit completely?
 
 TODO: try 2D linear sampling and see if the sector/req increases.
+(not sure why the per SM calculation is wrong)
 
 ## 4. Texture and Data Sharing in L1
 
-For global data, L1 hit bandwidth can reach 3606GB/s, which is ~53Byte/cycle per SM in 3070.
-For 
+For global data, L1 hit bandwidth can reach 3097GB/s  (460 blocks and 512 threads per block, freq locked at 1500MHz)  about 
+First experiment: 
+1. 460 blocks, and 640 threads. when threadId > 127, do global data load; otherwise do texture load. The bandwidth is ~2080GB/s. From Nsight, I can see that tex sector/request becomes 0.5. (wavefronts is 1.5 of requests and 64% of peak. While L1 global load is 21% of peak. ) (peaks should be wavefronts divided by some total number.)
+2. 460 blocks, and 256 threads. when threadId > 127, do global data load; otherwise do texture load. From Nsight, I can see that tex sector/request becomes 0.8.
