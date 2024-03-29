@@ -80,4 +80,5 @@ TODO: try 2D linear sampling and see if the sector/req increases.
 
 ## 4. Texture and Data Sharing in L1
 
-latency BW
+For global data, L1 hit bandwidth can reach 3606GB/s, which is ~53Byte/cycle per SM in 3070.
+For 
