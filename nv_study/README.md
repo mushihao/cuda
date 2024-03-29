@@ -76,8 +76,12 @@ In L1 cache, all accesses are 1 sector/req. Meaning that using point sampling on
 
 * For L2 hit/L1 miss, how to avoid L1 hit completely?
 
-TODO: try 2D linear sampling and see if the sector/req increases.
+TODO: 
 (not sure why the per SM calculation is wrong)
+
+### 3.2 2D texture access
+
+I used the exampled provided in CUDA Programming Guide, which does 2D texture fetch, and the sectors/req in L1 is 3.57 (935108/262144). Tuning the float angle from 0.5 to 1, the sectors/req reachs 3.82. With angle = 0.5, filter mode changed to Point, the sectors/req is 2.18 (572433/262144)
 
 ## 4. Texture and Data Sharing in L1
 
@@ -85,3 +89,4 @@ For global data, L1 hit bandwidth can reach 3097GB/s  (460 blocks and 512 thread
 First experiment: 
 1. 460 blocks, and 640 threads. when threadId > 127, do global data load; otherwise do texture load. The bandwidth is ~2080GB/s. From Nsight, I can see that tex sector/request becomes 0.5. (wavefronts is 1.5 of requests and 64% of peak. While L1 global load is 21% of peak. ) (peaks should be wavefronts divided by some total number.)
 2. 460 blocks, and 256 threads. when threadId > 127, do global data load; otherwise do texture load. From Nsight, I can see that tex sector/request becomes 0.8.
+
