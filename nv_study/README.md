@@ -92,3 +92,10 @@ First experiment:
 1. 460 blocks, and 640 threads. when threadId > 127, do global data load; otherwise do texture load. The bandwidth is ~2080GB/s. From Nsight, I can see that tex sector/request becomes 0.5. (wavefronts is 1.5 of requests and 64% of peak. While L1 global load is 21% of peak. ) (peaks should be wavefronts divided by some total number.)
 2. 460 blocks, and 256 threads. when threadId > 127, do global data load; otherwise do texture load. From Nsight, I can see that tex sector/request becomes 0.8.
 
+## 5. Texture 1D and 2D Fetch
+
+Nsight results for Texture Load (global stores are 4sectors/requests for all cases)
+|Kernel|Filter Mode|L1 Instructions|L1 Requests|L1 Sectors|L1 Sectors/Req|Hit Rate|Bytes|Sectors Miss to L2|Return to SM|
+|------|-----------|---------------|-----------|----------|--------------|--------|-----|------------------|------------|
+|2D|Point|32768|262,144|262,144|1|50|8,388,608|131,027|262,144|
+|1D|Point|32768|131,072|131,072|1|0|4,194,304|131,072|131,072|
