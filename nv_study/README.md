@@ -109,3 +109,7 @@ Nsight results for Texture Load (global stores are 4sectors/requests for all cas
 |1D|Point|32768|131,072|4|0|4,194,304|
 |2D|Linear|73195|155,802|2.13|15.89|4,985,664|
 |1D|Linear|0|0|0|0|0|
+
+Questions:
+1. Linear filter mode for 1D fetch is not correct (no L2 transactions are generated)
+2. In linear filter mode for 2D texture read, the results are all 0s.  (In point filter mode, the results are 0 - 1023 for the first row, which is expected.)
