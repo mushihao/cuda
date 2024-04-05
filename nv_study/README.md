@@ -114,3 +114,4 @@ Nsight results for Texture Load (global stores are 4sectors/requests for all cas
 Questions:
 1. Linear filter mode for 1D fetch is not correct (no L2 transactions are generated)
 2. In linear filter mode for 2D texture read, the results are all 0s.  (In point filter mode, the results are 0 - 1023 for the first row, which is expected.)
+     "Linear texture filtering may be done only for textures that are configured to return floating-point data. " From CUDA programming guide.
