@@ -97,7 +97,7 @@ First experiment:
 Nsight results for Texture Load (global stores are 4sectors/requests for all cases)
 |Kernel|Filter Mode|L1 Instructions|L1 Requests|L1 Sectors|L1 Sectors/Req|Hit Rate|Bytes|Sectors Miss to L2|Return to SM|
 |------|-----------|---------------|-----------|----------|--------------|--------|-----|------------------|------------|
-|2D|Point|32768|262,144|262,144|1|50|8,388,608|131,027|262,144|
+|2D|Point|32768|262,144|262,144|1|50|8,388,608|131,072|262,144|
 |1D|Point|32768|131,072|131,072|1|0|4,194,304|131,072|131,072|
 |2D|Linear|32768|262,144|783209|2.99|80.18|25,062,688|155,837|262,144|
 |1D|Linear|32768|262,144|0|0|0|0|0|262,144|
