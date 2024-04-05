@@ -119,8 +119,7 @@ int main() {
     for (int i = 0; i < NUM_BLOCK; ++i) {
         sum_time += dst[i * 2 + 1] - dst[i * 2];
     }
- //   wrong calculation
- //   printf("Total Cycles %u, avg cycles per block %.3f, averge Bandwidth per SM %.3f bytes/clk\n", sum_time, sum_time * 1.0 / NUM_BLOCK, length * sizeof(int) * loop_cnt * kIter * NUM_BLOCK * 1.0 / sum_time);
+    printf("Total Cycles %u, avg cycles per block %.3f, averge Bandwidth per SM %.3f bytes/clk\n", sum_time, sum_time * 1.0 / NUM_BLOCK, length * sizeof(int) * kIter * NUM_BLOCK * 1.0 / sum_time);
     printf("Result is %u\n", dst[2047]);
     // Destroy texture object
     cudaDestroyTextureObject(texObj);
