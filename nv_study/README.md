@@ -117,4 +117,15 @@ Questions:
      "Linear texture filtering may be done only for textures that are configured to return floating-point data. " From CUDA programming guide.
 ## 6. Threadfence latency
 
-7 , 327, 1697 cycles
+### 6.1 Results
+
+|API|Latency(cycle)|
+|---|-------|
+|threadfence_block()|7|
+|threadfence()|~327|
+|threadfence_system()|~1700|
+
+The order of the API calls in the kernel doesn't affect the latency. I tried to add some global store before threadfence call, and it doesn't affect the results either. Assume the cache flush only takes number of sets cycles:
+L1 is 128KB -> 1024 cachelines -> 64 sets (if 16 ways)
+L2 is 4MB -> 32K cachelines -> 2K sets (if 16 ways)
+But also need to consider the parallelism of different banks/slices. 
