@@ -129,3 +129,14 @@ The order of the API calls in the kernel doesn't affect the latency. I tried to 
 L1 is 128KB -> 1024 cachelines -> 64 sets (if 16 ways)
 L2 is 4MB -> 32K cachelines -> 2K sets (if 16 ways)
 But also need to consider the parallelism of different banks/slices. 
+
+## 7. Atomic Sectors per request
+
+### 7.1 Results
+
+|Function|Data Type|L2 sectors per req|L2 request|
+|--------|---------|------------------|----------|
+|atomicAdd|int|4|2|
+|atomicCAS|int|2|4|
+|atomicCAS|ull|2|8|
+|atomicCAS|short|2|2(load) + 4(CAS)|
