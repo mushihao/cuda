@@ -140,3 +140,17 @@ But also need to consider the parallelism of different banks/slices.
 |atomicCAS|int|2|4|
 |atomicCAS|ull|2|8|
 |atomicCAS|short|2|2(load) + 4(CAS)|
+
+## 8. L1 Associativity
+
+### 8.1 Results
+
+|Number of Int Array Element|Total Size(KB)|Stride|L1 Config|Order of Second Scan|L1 Hit Rate|
+|---------------------------|--------------|------|---------|--------------------|-----------|
+|32K|128|32|PreferL1|In-Order|0%|
+|16K|64|32|PreferL1|In-Order|12.5%|
+|8K|32|32|PreferL1|In-Order|50%|
+|4K|16|32|PreferL1|In-Order|50%|
+|16K|64|32|PreferL1|Reverse Order|35.55%|
+|8K|32|32|PreferShared|In-Order|0%|
+|4K|16|32|PreferShared|In-Order|14.84%|
