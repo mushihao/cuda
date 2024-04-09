@@ -145,7 +145,7 @@ But also need to consider the parallelism of different banks/slices.
 
 ### 8.1 Results
 
-|Number of Int Array Element|Total Size(KB)|Stride|L1 Config|Order of Second Scan|L1 Hit Rate|
+|Number of Int Array Element|Total Size(KB)|Stride(number of array element)|L1 Config|Order of Second Scan|L1 Hit Rate|
 |---------------------------|--------------|------|---------|--------------------|-----------|
 |32K|128|32|PreferL1|In-Order|0%|
 |16K|64|32|PreferL1|In-Order|12.5%|
@@ -153,4 +153,9 @@ But also need to consider the parallelism of different banks/slices.
 |4K|16|32|PreferL1|In-Order|50%|
 |16K|64|32|PreferL1|Reverse Order|35.55%|
 |8K|32|32|PreferShared|In-Order|0%|
-|4K|16|32|PreferShared|In-Order|14.84%|
+|4K|16|32|PreferShared|In-Order|14.84% (not consistent hit rate, range from 14-22%)|
+|16K|64|64|PreferL1|In-Order|50%|
+|32K|128|96|PreferL1|In-Order|50%|
+|32K|128|96|PreferShared|In-Order|0%|
+|2K|8|32|PreferShared|In-Order|50%|
+|4K|16|32|PreferShared|Reverse Order| 19.53% or 23.44%|
