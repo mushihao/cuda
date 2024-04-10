@@ -159,3 +159,8 @@ But also need to consider the parallelism of different banks/slices.
 |32K|128|96|PreferShared|In-Order|0%|
 |2K|8|32|PreferShared|In-Order|50%|
 |4K|16|32|PreferShared|Reverse Order| 19.53% or 23.44%|
+
+TODO: 
+1. change l1_associative kernel to remove write volatile and re-run
+2. compressible memory test https://www.zhihu.com/question/597437766/answer/3002601515
+
