@@ -169,12 +169,16 @@ But also need to consider the parallelism of different banks/slices.
 |16K|64|32|PreferShared|Reverse Order|12.79% or 12.70%|
 |8K|32|32|PreferShared|In-Order|17.97% or 16.60%|
 |8K|32|32|PreferShared|Reverse Order|24.02% or 22.85%|
+|6K|24|32|PreferShared|In-Order|30.99%, 33.07%, 36.72%, 36.46%|
+|6K|24|32|PreferShared|Reverse Order|39.32%, 38.80%|
+|5K|16|32|PreferShared|In-Order|50%|
+|5K|16|32|PreferShared|Reverse Order|50%|
 |4K|16|32|PreferShared|In-Order|50%|
 |4K|16|32|PreferShared|Reverse Order|50%|
 
 ### 8.2 Summary
-1. Even with PreferL1, users cannot have 128KB L1 total size
-2. With PreferShared, users can use 16KB L1 total size
+1. Even with PreferL1, users cannot have 128KB L1 total size, actual size is around 104KB.
+2. With PreferShared, users can use at least 20KB L1 total size.
 
    
 Questions:
