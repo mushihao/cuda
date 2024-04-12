@@ -17,12 +17,14 @@ constexpr int NUM_BLOCK = 1;
 template<typename T>
 __global__ void test_kernel(T* src, volatile int* dst, int stride, int length) {
     int tid = threadIdx.x + blockIdx.x * blockDim.x;
+    int result = 0;
     for (int i = 0; i < length; i = i + stride) {
-        dst[i] = src[i];
+        result += src[i];
     }
    for (int i = 0; i < length; i = i + stride) {
-        dst[i + 1] = src[i + 1];
+        result += src[i + 1];
     }
+    dst[0] = result;
 }
 
 template<typename T>
