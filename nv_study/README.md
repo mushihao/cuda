@@ -241,3 +241,4 @@ However, there is no results in L2 Compression in Nsight. We have to see the ben
 
 TODO: write compression
 To try: "对每两个cacheline中所有数值都比较接近的情况压缩效果好。"
+another hypothesis: when enabled compression, driver will double check the compression rate and decide if compression or not. It makes sense because the compression could have other penalties. If the benefit is less than some threshold value, then the compression will not be enabled. But this should only work with read buffers. 
