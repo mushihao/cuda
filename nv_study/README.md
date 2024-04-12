@@ -171,8 +171,8 @@ But also need to consider the parallelism of different banks/slices.
 |8K|32|32|PreferShared|Reverse Order|24.02% or 22.85%|
 |6K|24|32|PreferShared|In-Order|30.99%, 33.07%, 36.72%, 36.46%|
 |6K|24|32|PreferShared|Reverse Order|39.32%, 38.80%|
-|5K|16|32|PreferShared|In-Order|50%|
-|5K|16|32|PreferShared|Reverse Order|50%|
+|5K|20|32|PreferShared|In-Order|50%|
+|5K|20|32|PreferShared|Reverse Order|50%|
 |4K|16|32|PreferShared|In-Order|50%|
 |4K|16|32|PreferShared|Reverse Order|50%|
 
