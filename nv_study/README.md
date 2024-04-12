@@ -67,7 +67,7 @@ for (int i = 0; i < CARRAY_SIZE; i = i + blockDim.x) {
 
 * The T4 dissect report mentions that there is a private L1 constant cache and L1.5 constant cache. But after my tests, I think the L1.5 is shared by some of SMs, which needs further investigation. And the bandwidth is not increasing, probably because all L1.5 caches merged into 1 port to L2, so we don't bandwidth increasing. And probably this is only a narrow data bus (16 bits?).
 
-## 3. Texture
+## 3. Texture(Please use Section 5)
 
 The test uses point sampling of 1D texture, which is 1-to-1 mapping between original 1D array. Use linear memory which has larger maximum boundary in CUDA.
 
@@ -86,7 +86,7 @@ TODO:
 
 I used the exampled provided in CUDA Programming Guide, which does 2D texture fetch, and the sectors/req in L1 is 3.57 (935108/262144). Tuning the float angle from 0.5 to 1, the sectors/req reachs 3.82. With angle = 0.5, filter mode changed to Point, the sectors/req is 2.18 (572433/262144)
 
-## 4. Texture and Data Sharing in L1
+## 4. Texture and Data Sharing in L1(Please use Section 5)
 
 For global data, L1 hit bandwidth can reach 3097GB/s  (460 blocks and 512 threads per block, freq locked at 1500MHz)  about 
 First experiment: 
