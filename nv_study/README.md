@@ -141,14 +141,24 @@ But also need to consider the parallelism of different banks/slices.
 |atomicCAS|ull|2|8|
 |atomicCAS|short|2|2(load) + 4(CAS)|
 
-## 8. L1 Associativity
+## 8. L1 Size and Associativity sharing with Shared Memory
 
 ### 8.1 Results
 
 |Number of Int Array Element|Total Size(KB)|Stride(number of array element)|L1 Config|Order of Second Scan|L1 Hit Rate|
 |---------------------------|--------------|------|---------|--------------------|-----------|
-|32K|128|32|PreferL1|In-Order|0.59%|
+|96K|384|32|PreferL1|In-Order|0%|
+|96K|384|32|PreferL1|Reverse Order|12.97% or 12.94%|
+|32K|128|32|PreferL1|In-Order|0.59% or 0.49%|
 |32K|128|32|PreferL1|Reverse Order|37.89%|
+|30K|120|32|PreferL1|In-Order|6.35%, 6.87%, 6.82%|
+|30K|120|32|PreferL1|Reverse Order|39.06%, 39.90%|
+|27K|108|32|PreferL1|In-Order|40.97%, 39.99%, 40.91%|
+|27K|108|32|PreferL1|Reverse Order|47.45%, 47.28%|
+|26K|104|32|PreferL1|In-Order|50%|
+|26K|104|32|PreferL1|Reverse Order|50%|
+|24K|96|32|PreferL1|In-Order|50%|
+|24K|96|32|PreferL1|Reverse Order|50%|
 |16K|64|32|PreferL1|In-Order|50%|
 |16K|64|32|PreferL1|Reverse Order|50%|
 |8K|32|32|PreferL1|In-Order|50%|
@@ -164,7 +174,7 @@ But also need to consider the parallelism of different banks/slices.
 
 ### 8.2 Summary
 1. Even with PreferL1, users cannot have 128KB L1 total size
-2. With PreferShared, users can use 32KB L1 total size 
+2. With PreferShared, users can use 16KB L1 total size 
 
 TODO: 
 2. compressible memory test https://www.zhihu.com/question/597437766/answer/3002601515
