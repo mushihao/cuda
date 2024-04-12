@@ -195,11 +195,42 @@ Running saxpy with 92 blocks x 768 threads = 1.385 ms 0.363 TB/s
 
 Nsights:
 
-||L1 load from L2(MB)|L1 store to L2(MB)|L2 load hit rate|L2 load from DDR(MB)|L2 store to DDR(MB)|
-|-|------------------|------------------|-----------|--------------------|-------------------|
-|With Compression|335.54|167.77|62.26%|44.17|165.84|
-|Without Compression|335.54|167.77|0%|335.58|166.25
+||Array Value|L1 load from L2(MB)|L1 store to L2(MB)|L2 load hit rate|L2 load from DDR(MB)|L2 store to DDR(MB)|
+|-|----------|------------------|------------------|-----------|--------------------|-------------------|
+|With Compression|1.0f|335.54|167.77|62.26%|44.17|165.84|
+|Without Compression|1.0f|335.54|167.77|0%|335.58|166.25|
+|With Compression|random|335.54|167.77|0%|335.57|166.17|
+|Without Compression|random|335.54|167.77|0%|342.97|166.25|
+|With Compression|x,z: random; y,w:0|335.54|167.77|0%|335.57|167.97|
+|Without Compression|x,z: random; y,w:0|335.54|167.77|0%|335.56|166.17|
+|With Compression|h[x].x,h[y].z: random; others:0|335.54|167.77|0%|192.43|165.90|
+|Without Compression|h[x].x,h[y].z: random; others:0|335.54|167.77|0%|335.56|166.20|
+|With Compression|z,w: random; x,y:0|335.54|167.77|0%|335.57|166.15|
+|Without Compression|z,w: random; x,y:0|335.54|167.77|0%|344.13|166.19|
+
+With constant value, the compression rate is really high. And here are some other Nsight statistic for **global load** when changing the number of constant elements:
+
+||length of 1.0f (n = 10485760)|L1 Sectors misses to L2|L2 Requests|L2 Sectors|L2 Sectors per request|L2 Bytes|Hit Rate|
+|-|----------------------------|-----------------------|-----------|----------|----------------------|--------|--------|
+|With Compression|from 0 to n|10,485,760|2,621,440|3,755,266|1.43|120,168,512|62.26%|
+|Without Compression|from 0 to n|10,485,760|2,621,440|10,485,760|4|335,544,320|0%|
+|With Compression|from 0 to n/4|10,485,760|2,621,440|8,818,924|3.36|282,205,568|6.31%|
+|With Compression|from 0 to n/2|10,485,760|2,621,440|7,051,672|2.69|225,653,504|16.24%|
+|With Compression|from 0 to 3n/4|10,485,760|2,621,440|5,385,412|2.05|172,333,184|31.57%|
+|With Compression|from 0 to 2(1sector)|10,485,760|2,621,440|10,485,760|4|335,544,320|0%|
+|With Compression|from 0 to 8(1line)|10,485,760|2,621,440|10,485,760|4|335,544,320|0%|
+|With Compression|from 0 to 16(2lines)|10,485,760|2,621,440|10,485,760|4|335,544,320|0%|
+|With Compression|from 0 to 128(16lines)|10,485,760|2,621,440|10,485,760|4|335,544,320|0%|
+|With Compression|from 0 to 256(4KB)|10,485,760|2,621,440|10,485,760|4|335,544,320|0%|
+|With Compression|from 0 to n - 256|10,485,760|2,621,440|3,756,928|1.43|120,221,696|59.70%|
+|With Compression|from 0 to n - 8|10,485,760|2,621,440|3,755,884|1.43|120,188,288|59.73%|
+|With Compression|from 0 to n - 2|10,485,760|2,621,440|3,757,234|1.43|120,231,488|59.69%|
+
 
 However, there is no results in L2 Compression in Nsight. We have to see the benefit through DDR traffic.
+
+### 9.2 Summary
+
+1. 
 
 
