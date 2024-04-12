@@ -147,20 +147,26 @@ But also need to consider the parallelism of different banks/slices.
 
 |Number of Int Array Element|Total Size(KB)|Stride(number of array element)|L1 Config|Order of Second Scan|L1 Hit Rate|
 |---------------------------|--------------|------|---------|--------------------|-----------|
-|32K|128|32|PreferL1|In-Order|0%|
-|16K|64|32|PreferL1|In-Order|12.5%|
+|32K|128|32|PreferL1|In-Order|0.59%|
+|32K|128|32|PreferL1|Reverse Order|37.89%|
+|16K|64|32|PreferL1|In-Order|50%|
+|16K|64|32|PreferL1|Reverse Order|50%|
 |8K|32|32|PreferL1|In-Order|50%|
 |4K|16|32|PreferL1|In-Order|50%|
-|16K|64|32|PreferL1|Reverse Order|35.55%|
-|8K|32|32|PreferShared|In-Order|0%|
-|4K|16|32|PreferShared|In-Order|14.84% (not consistent hit rate, range from 14-22%)|
+|32K|128|64|PreferL1|In-Order|50%|
 |16K|64|64|PreferL1|In-Order|50%|
-|32K|128|96|PreferL1|In-Order|50%|
-|32K|128|96|PreferShared|In-Order|0%|
-|2K|8|32|PreferShared|In-Order|50%|
-|4K|16|32|PreferShared|Reverse Order| 19.53% or 23.44%|
+|16K|64|32|PreferShared|In-Order|0%|
+|16K|64|32|PreferShared|Reverse Order|12.79% or 12.70%|
+|8K|32|32|PreferShared|In-Order|17.97% or 16.60%|
+|8K|32|32|PreferShared|Reverse Order|24.02% or 22.85%|
+|4K|16|32|PreferShared|In-Order|50%|
+|4K|16|32|PreferShared|Reverse Order|50%|
+
+### 8.2 Summary
+1. Even with PreferL1, users cannot have 128KB L1 total size
+2. With PreferShared, users can use 32KB L1 total size 
 
 TODO: 
-1. change l1_associative kernel to remove write volatile and re-run
 2. compressible memory test https://www.zhihu.com/question/597437766/answer/3002601515
-
+Questions:
+why in-order is much faster than reverse order access? 21000 cycles vs. 61000 cycles for 8K;  10000 cycles vs. 17000 cycles for 4K
