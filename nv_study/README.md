@@ -222,7 +222,8 @@ With constant value, the compression rate is really high. And here are some othe
 |With Compression|from 0 to 16(2lines)|10,485,760|2,621,440|10,485,760|4|335,544,320|0%|
 |With Compression|from 0 to 128(16lines)|10,485,760|2,621,440|10,485,760|4|335,544,320|0%|
 |With Compression|from 0 to 256(4KB)|10,485,760|2,621,440|10,485,760|4|335,544,320|0%|
-|With Compression|from 0 to n - 256|10,485,760|2,621,440|3,756,928|1.43|120,221,696|59.70%|
+|With Compression|from 0 to n - 256|10,485,760|2,621,440|3,756,928/3,759,280|1.43|120,221,696/120,296,960|59.70%|
+|With Compression|from 0 to n - 16|10,485,760|2,621,440|3,757,312/3,753,844|1.43|120,233,984/120,123,008|59.69%|
 |With Compression|from 0 to n - 8|10,485,760|2,621,440|3,755,884|1.43|120,188,288|59.73%|
 |With Compression|from 0 to n - 2|10,485,760|2,621,440|3,757,234|1.43|120,231,488|59.69%|
 
@@ -234,3 +235,4 @@ However, there is no results in L2 Compression in Nsight. We have to see the ben
 1. 
 
 
+TODO: write compression
