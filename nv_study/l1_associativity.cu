@@ -20,10 +20,23 @@ __global__ void test_kernel(T* src, volatile int* dst, int stride, int length) {
     for (int i = 0; i < length; i = i + stride) {
         dst[i] = src[i];
     }
-   // for (int i = 0; i < length; i = i + stride) {
-    for (int i = length - stride; i >= 0; i = i - stride) {
+   for (int i = 0; i < length; i = i + stride) {
         dst[i + 1] = src[i + 1];
     }
+}
+
+template<typename T>
+__global__ void reverse_test_kernel(T* src, volatile int* dst, int stride, int length) {
+    int tid = threadIdx.x + blockIdx.x * blockDim.x;
+    int result = 0;
+    for (int i = 0; i < length; i = i + stride) {
+        result += src[i];
+    }
+    //for (int i = 0; i < length; i = i + stride) {
+    for (int i = length - stride; i >= 0; i = i - stride) {
+        result += src[i + 1];
+    }
+    dst[0] = result;
 }
 
 
@@ -51,7 +64,10 @@ int main() {
     cudaEventCreate(&stop);
     cudaEventRecord(start);
     //128 KB -> 1024 cachelines ; 16 ways -> 64 sets
-    test_kernel<int> << <NUM_BLOCK, BLOCK_SIZE >> > (reinterpret_cast<int*>(device_src), device_dst, 32, length);
+    for (int i = 0; i < loop_cnt; i++) {
+        test_kernel<int> << <NUM_BLOCK, BLOCK_SIZE >> > (reinterpret_cast<int*>(device_src), device_dst, 32, length);
+        reverse_test_kernel<int> << <NUM_BLOCK, BLOCK_SIZE >> > (reinterpret_cast<int*>(device_src), device_dst, 32, length);
+    }
     cudaEventRecord(stop);
     cudaDeviceSynchronize();
     cudaEventElapsedTime(&time, start, stop);
