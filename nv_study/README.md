@@ -240,3 +240,4 @@ However, there is no results in L2 Compression in Nsight. We have to see the ben
 
 
 TODO: write compression
+To try: "对每两个cacheline中所有数值都比较接近的情况压缩效果好。"
