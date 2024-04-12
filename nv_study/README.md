@@ -174,9 +174,32 @@ But also need to consider the parallelism of different banks/slices.
 
 ### 8.2 Summary
 1. Even with PreferL1, users cannot have 128KB L1 total size
-2. With PreferShared, users can use 16KB L1 total size 
+2. With PreferShared, users can use 16KB L1 total size
 
-TODO: 
-2. compressible memory test https://www.zhihu.com/question/597437766/answer/3002601515
+   
 Questions:
 why in-order is much faster than reverse order access? 21000 cycles vs. 61000 cycles for 8K;  10000 cycles vs. 17000 cycles for 4K
+
+## 9. L2 Data Compression
+
+The official cuda sample has issues and here is the fix, https://www.zhihu.com/question/597437766/answer/3002601515  . Need to use cudaMallocHost and cudaFreeHost for compressible memories.
+
+### 9.1 Results
+Default setup:
+```
+Running saxpy on 167772160 bytes of Compressible memory
+Running saxpy with 92 blocks x 768 threads = 0.552 ms 0.912 TB/s
+Running saxpy on 167772160 bytes of Non-Compressible memory
+Running saxpy with 92 blocks x 768 threads = 1.385 ms 0.363 TB/s
+```
+
+Nsights:
+
+||L1 load from L2(MB)|L1 store to L2(MB)|L2 load hit rate|L2 load from DDR(MB)|L2 store to DDR(MB)|
+|-|------------------|------------------|-----------|--------------------|-------------------|
+|With Compression|335.54|167.77|62.26%|44.17|165.84|
+|Without Compression|335.54|167.77|0%|335.58|166.25
+
+However, there is no results in L2 Compression in Nsight. We have to see the benefit through DDR traffic.
+
+
