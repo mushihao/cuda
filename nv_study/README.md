@@ -181,8 +181,9 @@ But also need to consider the parallelism of different banks/slices.
 2. With PreferShared, users can use at least 20KB L1 total size.
 
    
-Questions:
-why in-order is much faster than reverse order access? 21000 cycles vs. 61000 cycles for 8K;  10000 cycles vs. 17000 cycles for 4K
+Questions: why in-order is much faster than reverse order access? 21000 cycles vs. 61000 cycles for 8K;  10000 cycles vs. 17000 cycles for 4K
+
+Answers: From PTX, it looks like that the in-order loop is unrolled with 4, but the reverse order loop is not unrolled.
 
 ## 9. L2 Data Compression
 
