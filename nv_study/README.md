@@ -212,6 +212,8 @@ Nsights:
 |Without Compression|h[x].x,h[y].z: random; others:0|335.54|167.77|0%|335.56|166.20|
 |With Compression|z,w: random; x,y:0|335.54|167.77|0%|335.57|166.15|
 |Without Compression|z,w: random; x,y:0|335.54|167.77|0%|344.13|166.19|
+|With Compression|randomly select 10% are random, others are 0 |335.54|167.77|10.04%|120.01|165.93|
+|Without Compression|randomly select 10% are random, others are 0|335.54|167.77|0%|335.56|166.30|
 
 With constant value, the compression rate is really high. And here are some other Nsight statistic for **global load** when changing the number of constant elements:
 
