@@ -233,9 +233,15 @@ With constant value, the compression rate is really high. And here are some othe
 |With Compression|from 0 to n - 16|10,485,760|2,621,440|3,757,312/3,753,844|1.43|120,233,984/120,123,008|59.69%|
 |With Compression|from 0 to n - 8|10,485,760|2,621,440|3,755,884|1.43|120,188,288|59.73%|
 |With Compression|from 0 to n - 2|10,485,760|2,621,440|3,757,234|1.43|120,231,488|59.69%|
-
+|With Compression|Every 4 consecutive float4 are the same random float4|10,485,760|2,621,440|11,061,954|3.92|353,982,528|0%|
+|With Compression|Every 8 consecutive float4 are the same random float4|10,485,760|2,621,440|3,725,374|1.42|119,211,968|1.62%|
+|With Compression|Every 16 consecutive float4 are the same random float4|10,485,760|2,621,440|3,723,262|1.42|119,144,384|0%|
+|With Compression|Every 64 consecutive float4 are the same random float4|10,485,760|2,621,440|3,727,366|1.42|119,275,712|0%|
+|With Compression|All float4 are the same random float4|10,485,760|2,621,440|3,727,264|1.42|119,272,448|0%|
 
 However, there is no results in L2 Compression in Nsight. We have to see the benefit through DDR traffic.
+
+
 
 ### 9.2 Summary
 
