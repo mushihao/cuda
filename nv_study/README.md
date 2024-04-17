@@ -248,6 +248,9 @@ However, there is no results in L2 Compression in Nsight. We have to see the ben
 1. 
 
 
-TODO: write compression
-To try: "对每两个cacheline中所有数值都比较接近的情况压缩效果好。"
-another hypothesis: when enabled compression, driver will double check the compression rate and decide if compression or not. It makes sense because the compression could have other penalties. If the benefit is less than some threshold value, then the compression will not be enabled. But this should only work with read buffers. 
+TODO: 
+write compression: cannot be done? because  
+"    // On SM 8.0 and 8.6 GPUs compressible buffer can only be initialized 
+        // through cudaMemcpy."
+another hypothesis: when enabled compression, driver will double check the compression rate and decide if compression or not. It makes sense because the compression could have other penalties. If the benefit is less than some threshold value, then the compression will not be enabled. But this should only work with read buffers. It seems matched what the sample does, write cannot be compressed. 
+Perhaps, the compression is done through some dictionary method? but then why "All float4 are the same random float4" only has 0 hit rate?
