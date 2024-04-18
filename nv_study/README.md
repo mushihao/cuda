@@ -245,7 +245,10 @@ However, there is no results in L2 Compression in Nsight. We have to see the ben
 
 ### 9.2 Summary
 
-1. 
+1. The compression happens between L1 and L2, which can reduce the NoC/L2 bandwidth(in terms of sectors per requests)
+2. Constant 1 gives the best performance with more L2 hit rate.
+3. If every cachelines are the same, the compression rate can reach the highest.
+4. Does it use some dictionary method for compression?
 
 
 TODO: 
