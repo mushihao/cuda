@@ -183,7 +183,7 @@ But also need to consider the parallelism of different banks/slices.
    
 Questions: why in-order is much faster than reverse order access? 21000 cycles vs. 61000 cycles for 8K;  10000 cycles vs. 17000 cycles for 4K
 
-Answers: From PTX, it looks like that the in-order loop is unrolled with 4, but the reverse order loop is not unrolled.
+Answers: From PTX, it looks like that the in-order loop is unrolled with 4, but the reverse order loop is not unrolled. From SASS, the in-order loop is unrolled with 16, but the reverse order loop cannot be unrolled.
 
 ## 9. L2 Data Compression
 
@@ -247,7 +247,7 @@ However, there is no results in L2 Compression in Nsight. We have to see the ben
 
 1. The compression happens between L1 and L2, which can reduce the NoC/L2 bandwidth(in terms of sectors per requests)
 2. Constant 1 gives the best performance with more L2 hit rate.
-3. If every cachelines are the same, the compression rate can reach the highest.
+3. If every cachelines are the same, the compression rate can reach the highest, but the L2 hit rate is different. A constant 1 in every element can have L2 hit rate as high as 60%. A constant with random number cannot reach high L2 hit rate (still 0%).
 4. Does it use some dictionary method for compression?
 
 
