@@ -241,6 +241,9 @@ With constant value, the compression rate is really high. And here are some othe
 
 However, there is no results in L2 Compression in Nsight. We have to see the benefit through DDR traffic.
 
+Other experiments:
+with each float4 element fixed to 0.0f or 1.0f, the L2 load hit rate is high. However, if the value is fixed to 2.0f or 3.0f, the L2 load hit rate is 0. (compression rate is similar though)
+And if 16 consecutive float4 are 0.0f or 1.0f, the L2 load hit rate is high. However, if only 8 consecutive float4 are 0.0f or 1.0f (the next 8 are the other fixed value , 1.0f or 0.0f), the L2 load hit rate is low. 
 
 
 ### 9.2 Summary
